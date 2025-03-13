@@ -1,0 +1,59 @@
+﻿@page "/"
+@using NumberProcessor.Core
+
+<PageTitle>Number Processor</PageTitle>
+
+<div class="container mt-4">
+    <h1>Number Processor</h1>
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <div class="input-group">
+                <input type="number"
+                       class="form-control"
+                       @bind="upperBound"
+                       @bind:event="oninput"
+                       @onkeypress="HandleKeyPress"
+                       min="1"
+                       placeholder="Enter upper bound">
+                <button class="btn btn-primary" @onclick="ProcessNumbers">Process</button>
+            </div>
+            <small class="text-muted">Enter a positive integer</small>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(result))
+    {
+        <div class="card mt-4">
+            <div class="card-header">Results</div>
+            <div class="card-body">
+                <pre style="white-space: pre-line">@result</pre>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private int upperBound;
+    private string result = string.Empty;
+
+    private void ProcessNumbers()
+    {
+        if (upperBound > 0)
+        {
+            result = NumberFormatter.ProcessRange(upperBound);
+        }
+        else
+        {
+            result = "Please enter a positive integer greater than 0.";
+        }
+    }
+
+    private void HandleKeyPress(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            ProcessNumbers();
+        }
+    }
+}
